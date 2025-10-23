@@ -76,7 +76,7 @@
       notify: restart datadog-agent
 
   handlers:
-    - name: restart datadog-agent
+    - name: Restart datadog-agent
       ansible.builtin.service:
         name: datadog-agent
         state: restarted
