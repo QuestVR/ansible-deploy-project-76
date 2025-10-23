@@ -25,6 +25,7 @@
         port: "{{ lookup('env', 'REDMINE_DB_PORT') }}"
         user: "{{ lookup('env', 'REDMINE_DB_USERNAME') }}"
         db: "{{ lookup('env', 'REDMINE_DB_DATABASE') }}"
+        redmine_port: "{{ lookup('env', 'REDMINE_PORT') }}"
       tags: redmine
     - name: create redmine dir
       ansible.builtin.file:
