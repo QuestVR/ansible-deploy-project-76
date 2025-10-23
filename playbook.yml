@@ -1,5 +1,69 @@
 - hosts: all
   become: yes
   roles:
-    - geerlingguy.pip
+    - role: geerlingguy.pip
+      tags: prepare
+      vars:
+        pip_install_packages:
+          - name: pip
+            state: present
+          - name: docker
+            state: present
+  tasks:
+    - name: import datadog agent
+      import_role:
+        name: datadog.dd.agent
+      tags: redmine
+    - name: create redmine dir
+      ansible.builtin.file:
+        path: /opt/redmine
+        state: directory
+        mode: '0755'
+      tags: redmine
+    - name: template env
+      ansible.builtin.template:
+        src: templates/.env.j2
+        dest: /opt/redmine/.env
+        mode: '0644'
+      tags: redmine
+    - name: Create a data container
+      community.docker.docker_container:
+        name: redmine
+        image: redmine
+        state: started
+        env_file: /opt/redmine/.env
+        ports:
+          - "{{ redmine_port }}:3000"
+      tags: redmine
+    - name: Create http_check config for Redmine
+      copy:
+        content: |
+          instances:
+            - name: "Redmine Health Check"
+              url: http://localhost:30080
+              timeout: 5
+              tags:
+                - service:redmine
+                - env:prod
+                - protocol:http
+
+           - name: "Redmine Health Check"
+              url: https://localhost:30080
+              timeout: 5
+              tls_verify: false
+              tls_ignore_warning: true
+              tags:
+                - service:redmine
+                - env:prod
+                - protocol:https
+        dest: /etc/datadog-agent/conf.d/http_check.d/redmine.yaml
+        mode: '0644'
+      tags: redmine
+      notify: restart datadog-agent
+
+  handlers:
+    - name: restart datadog-agent
+      service:
+        name: datadog-agent
+        state: restarted
 
