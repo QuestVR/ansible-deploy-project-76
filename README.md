@@ -9,6 +9,10 @@ prepare hosts:
 ```bash
 make prepare
 ```
+edit db pass:
+```bash
+make edit-secrets
+```
 start redmine:
 ```bash
 make redmine

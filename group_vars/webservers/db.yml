@@ -1,0 +1,4 @@
+dbpostgres: "rc1a-el45hjdb2smei3fn.mdb.yandexcloud.net"
+port: "6432"
+user: "postgres1"
+db: "postgres1"
