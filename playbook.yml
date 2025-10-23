@@ -13,6 +13,8 @@
     - name: import datadog agent
       import_role:
         name: datadog.dd.agent
+      vars:
+        datadog_api_key: "{{ datadog_api_key }}"
       tags: redmine
     - name: create redmine dir
       ansible.builtin.file:
