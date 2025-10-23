@@ -10,6 +10,10 @@
           - name: docker
             state: present
   tasks:
+    - name: Set Datadog API key for Ansible role
+      ansible.builtin.set_fact:
+        datadog_api_key: "{{ lookup('env', 'DATADOG_API_KEY') }}"
+      tags: redmine
     - name: import datadog agent
       import_role:
         name: datadog.dd.agent
