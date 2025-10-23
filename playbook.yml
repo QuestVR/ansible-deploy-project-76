@@ -73,10 +73,10 @@
         dest: /etc/datadog-agent/conf.d/http_check.d/redmine.yaml
         mode: '0644'
       tags: redmine
-      notify: Restart datadog-agent
+      notify: restart datadog-agent
 
   handlers:
-    - name: Restart datadog-agent
+    - name: restart datadog-agent
       ansible.builtin.service:
         name: datadog-agent
         state: restarted
