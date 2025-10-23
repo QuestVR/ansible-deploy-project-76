@@ -1,0 +1,22 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: create redmine dir
+      ansible.builtin.file:
+        path: /opt/redmine
+        state: directory
+        mode: '0755'
+    - name: template env
+      ansible.builtin.template:
+        src: templates/.env.j2
+        dest: /opt/redmine/.env
+        mode: '0644'
+    - name: Create a data container
+      community.docker.docker_container:
+        name: redmine
+        image: redmine
+        state: started
+        env_file: /opt/redmine/.env
+        ports:
+          - "{{ redmine_port }}:3000"
+
