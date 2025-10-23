@@ -18,6 +18,14 @@
       import_role:
         name: datadog.dd.agent
       tags: redmine
+    - name: Set Redmine env variables
+      ansible.builtin.set_fact:
+        dbpostgres: "{{ lookup('env', 'REDMINE_DB_POSTGRES') }}"
+        pass: "{{ lookup('env', 'REDMINE_DB_PASSWORD') }}"
+        port: "{{ lookup('env', 'REDMINE_DB_PORT') }}"
+        user: "{{ lookup('env', 'REDMINE_DB_USERNAME') }}"
+        db: "{{ lookup('env', 'REDMINE_DB_DATABASE') }}"
+      tags: redmine
     - name: create redmine dir
       ansible.builtin.file:
         path: /opt/redmine
